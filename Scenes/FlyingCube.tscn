@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://cu0tb5fxedwyi"]
+
+[ext_resource type="Script" uid="uid://ctwdpbhasiril" path="res://Scripts/FlyingBox.gd" id="1_ojwd5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ojwd5"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ojwd5"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[node name="FlyingCube" type="RigidBody3D"]
+collision_layer = 2
+gravity_scale = 0.0
+script = ExtResource("1_ojwd5")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+layers = 2
+size = Vector3(0.5, 0.5, 0.5)
+material = SubResource("StandardMaterial3D_ojwd5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_ojwd5")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

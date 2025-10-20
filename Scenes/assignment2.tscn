@@ -1,0 +1,112 @@
+[gd_scene load_steps=16 format=3 uid="uid://ds4x2a82gi2f6"]
+
+[ext_resource type="Script" uid="uid://dapabkaimc16q" path="res://Scripts/main.gd" id="1_hnigx"]
+[ext_resource type="Script" uid="uid://bsrwi0grntsrq" path="res://Scripts/LeftSword.gd" id="2_ngeo5"]
+[ext_resource type="PackedScene" uid="uid://cnwp7ndjr4s8y" path="res://Quest2Controllers/OculusQuest2TouchController_Left.gltf" id="3_6yac0"]
+[ext_resource type="Script" uid="uid://cs8x0o1le61q" path="res://Scripts/LineRenderer.gd" id="4_7cj47"]
+[ext_resource type="AudioStream" uid="uid://l3v2j7601551" path="res://slice-apple-on-wood_fizz-85879.mp3" id="5_mmnii"]
+[ext_resource type="Script" uid="uid://fncpb3awx347" path="res://Scripts/RightSword.gd" id="6_tyxjx"]
+[ext_resource type="PackedScene" uid="uid://bc8lh0rihgxvi" path="res://Quest2Controllers/OculusQuest2TouchController_Right.gltf" id="7_louc4"]
+[ext_resource type="Script" uid="uid://wi86graqjrnv" path="res://Scripts/cubes.gd" id="8_wdi34"]
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_43osp"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qtpg1"]
+radius = 0.02
+height = 1.0
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_o2rka"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l7iob"]
+radius = 0.02
+height = 1.0
+
+[sub_resource type="Environment" id="Environment_hc2a7"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_an7sw"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qtpg1"]
+size = Vector3(100, 0.1, 100)
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_hnigx")
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+
+[node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
+tracker = &"left_hand"
+script = ExtResource("2_ngeo5")
+
+[node name="OculusQuest2TouchController_Left" parent="XROrigin3D/LeftHand" instance=ExtResource("3_6yac0")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="LineRenderer" type="MeshInstance3D" parent="XROrigin3D/LeftHand"]
+layers = 2
+mesh = SubResource("ImmediateMesh_43osp")
+script = ExtResource("4_7cj47")
+
+[node name="Area3D" type="Area3D" parent="XROrigin3D/LeftHand"]
+collision_mask = 2
+
+[node name="SwordCollision" type="CollisionShape3D" parent="XROrigin3D/LeftHand/Area3D"]
+shape = SubResource("CapsuleShape3D_qtpg1")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="XROrigin3D/LeftHand"]
+stream = ExtResource("5_mmnii")
+
+[node name="RightHand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
+tracker = &"right_hand"
+script = ExtResource("6_tyxjx")
+
+[node name="OculusQuest2TouchController_Right" parent="XROrigin3D/RightHand" instance=ExtResource("7_louc4")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="LineRenderer" type="MeshInstance3D" parent="XROrigin3D/RightHand"]
+layers = 2
+mesh = SubResource("ImmediateMesh_o2rka")
+script = ExtResource("4_7cj47")
+
+[node name="Area3D" type="Area3D" parent="XROrigin3D/RightHand"]
+collision_mask = 2
+
+[node name="SwordCollision" type="CollisionShape3D" parent="XROrigin3D/RightHand/Area3D"]
+shape = SubResource("CapsuleShape3D_l7iob")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="XROrigin3D/RightHand"]
+stream = ExtResource("5_mmnii")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_hc2a7")
+camera_attributes = SubResource("CameraAttributesPractical_an7sw")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 0, 0)
+light_energy = 2.0
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="WorldEnvironment"]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CSGBox3D" type="CSGBox3D" parent="WorldEnvironment/StaticBody3D2"]
+size = Vector3(100, 0.1, 100)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+shape = SubResource("BoxShape3D_qtpg1")
+
+[node name="CubeSpawner" type="Node3D" parent="."]
+script = ExtResource("8_wdi34")
+
+[node name="Timer" type="Timer" parent="CubeSpawner"]
+
+[connection signal="button_pressed" from="XROrigin3D/LeftHand" to="XROrigin3D/LeftHand" method="_on_button_pressed"]
+[connection signal="body_entered" from="XROrigin3D/LeftHand/Area3D" to="XROrigin3D/LeftHand" method="_on_area_3d_body_entered"]
+[connection signal="button_pressed" from="XROrigin3D/RightHand" to="XROrigin3D/RightHand" method="_on_button_pressed"]
+[connection signal="button_pressed" from="XROrigin3D/RightHand" to="CubeSpawner" method="_on_right_hand_button_pressed"]
+[connection signal="body_entered" from="XROrigin3D/RightHand/Area3D" to="XROrigin3D/RightHand" method="_on_area_3d_body_entered"]
+[connection signal="timeout" from="CubeSpawner/Timer" to="CubeSpawner" method="_on_timer_timeout"]
